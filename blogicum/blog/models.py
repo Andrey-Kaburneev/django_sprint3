@@ -11,6 +11,9 @@ class Category(models.Model):
     is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Location(models.Model):
     name = models.CharField(max_length=256)
