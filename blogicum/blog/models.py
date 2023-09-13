@@ -9,7 +9,7 @@ class Category(models.Model):
     description = models.TextField()
     slug = models.SlugField(unique=True)
     is_published = models.BooleanField(default=True)
-    create_ad = models.DateTimeField(auto_now_add=True)
+    created_ad = models.DateTimeField(auto_now_add=True)
 
 
 class Location(models.Model):
@@ -30,4 +30,4 @@ class Post(models.Model):
         Category, on_delete=models.SET_NULL, null=True
         )
     is_published = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_ad = models.DateTimeField(auto_now_add=True)
