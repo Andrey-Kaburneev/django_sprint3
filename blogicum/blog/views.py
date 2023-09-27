@@ -25,13 +25,13 @@ def post_detail(request, pk):
     post = get_object_or_404(
         Post.objects.select_related(
             'author', 'location', 'category'
-            ).filter(
-                Q(pub_date__lte=dt.now()) &
-                Q(is_published=True) &
-                Q(category__is_published=True)
-            ),
+        ).filter(
+            Q(pub_date__lte=dt.now())
+            & Q(is_published=True)
+            & Q(category__is_published=True)
+        ),
         pk=pk
-        )
+    )
     context = {'post': post}
     return render(request, template_name, context)
 
@@ -42,16 +42,16 @@ def category_posts(request, category_slug):
         Category,
         slug=category_slug,
         is_published=True
-        )
+    )
     post_list = Post.objects.select_related(
         'location',
         'author',
         'category'
-        ).filter(
-            is_published=True,
-            category__is_published=True,
-            pub_date__date__lt=dt.now(),
-        ).filter(category=category,)
+    ).filter(
+        is_published=True,
+        category__is_published=True,
+        pub_date__date__lt=dt.now(),
+    ).filter(category=category,)
     context = {'category': category,
                'post_list': post_list}
     return render(request, template_name, context)
