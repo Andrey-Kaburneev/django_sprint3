@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime as dt
-from django.db.models import Q
 
 from blog.models import Post, Category
+
+
+five_recent_pub = slice(5)
 
 
 def index(request):
@@ -15,7 +17,7 @@ def index(request):
         category__is_published=True
     ).order_by(
         '-pub_date'
-    )[:5]
+    )[five_recent_pub]
     context = {'post_list': post_list}
     return render(request, template_name, context)
 
@@ -26,9 +28,9 @@ def post_detail(request, pk):
         Post.objects.select_related(
             'author', 'location', 'category'
         ).filter(
-            Q(pub_date__lte=dt.now())
-            & Q(is_published=True)
-            & Q(category__is_published=True)
+            pub_date__lte=dt.now(),
+            is_published=True,
+            category__is_published=True
         ),
         pk=pk
     )
@@ -51,7 +53,8 @@ def category_posts(request, category_slug):
         is_published=True,
         category__is_published=True,
         pub_date__date__lt=dt.now(),
-    ).filter(category=category,)
+        category=category
+    )
     context = {'category': category,
                'post_list': post_list}
     return render(request, template_name, context)
