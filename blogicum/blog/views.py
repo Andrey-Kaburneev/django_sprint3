@@ -4,7 +4,7 @@ from datetime import datetime as dt
 from blog.models import Post, Category
 
 
-five_recent_pub = slice(5)
+FIVE_RECENT_PUB = 5
 
 
 def index(request):
@@ -17,7 +17,7 @@ def index(request):
         category__is_published=True
     ).order_by(
         '-pub_date'
-    )[five_recent_pub]
+    )[:FIVE_RECENT_PUB]
     context = {'post_list': post_list}
     return render(request, template_name, context)
 
